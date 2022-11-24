@@ -26,9 +26,16 @@ const Home: NextPage = () => {
     id: second,
   });
 
+  const voteMutation = trpc.pokemonRouter.castVote.useMutation();
+
   if (secondPokemon.isLoading || secondPokemon.isLoading) return null;
 
   const voteForRoundest = (selected: number) => {
+    if (selected === first) {
+      voteMutation.mutate({ votedFor: first, votedAgainst: second });
+    } else {
+      voteMutation.mutate({ votedFor: second, votedAgainst: first });
+    }
     updateIds(getOptionsForVote());
   };
 
