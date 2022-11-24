@@ -7,9 +7,6 @@ import { RouterOutputs } from "../utils/trpc";
 
 import { trpc } from "../utils/trpc";
 
-const buttonClasses =
-  "inline-block rounded bg-blue-600 px-6 py-2.5 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg";
-
 const Home: NextPage = () => {
   const [hydrated, setHydrated] = useState(false);
   useEffect(() => {
@@ -86,28 +83,21 @@ const PokemonListing: React.FC<{
   vote: () => void;
 }> = (props) => {
   return (
-    <div className="flex h-64 w-64 flex-col items-center bg-gradient-to-b from-[#1782c9] to-[#c75d29]">
+    <div className="flex h-64 w-64 flex-col bg-gradient-to-b from-[#1782c9] to-[#c75d29]">
       {props.pokemon?.sprites?.front_default && (
         <div className="relative h-full w-full">
           <Image
             src={props.pokemon.sprites.front_default}
             layout="fill" // required
             alt={props.pokemon.name}
+            onClick={() => props.vote()}
+            className="hover:cursor-pointer"
           />
         </div>
       )}
-      <div className="text-center text-xl capitalize text-white">
+      <div className="bg-red-50 text-center text-xl capitalize">
         {props.pokemon?.name}
       </div>
-      <button
-        type="button"
-        data-mdb-ripple="true"
-        data-mdb-ripple-color="light"
-        className={buttonClasses}
-        onClick={() => props.vote()}
-      >
-        Rounder
-      </button>
     </div>
   );
 };
