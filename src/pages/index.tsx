@@ -6,13 +6,16 @@ import { getOptionsForVote } from "../utils/getRandomPokemon";
 
 import { trpc } from "../utils/trpc";
 
+const buttonClasses =
+  "inline-block rounded bg-blue-600 px-6 py-2.5 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg";
+
 const Home: NextPage = () => {
   const [hydrated, setHydrated] = useState(false);
   useEffect(() => {
     setHydrated(true);
   }, []);
 
-  const [first, second] = useMemo(() => getOptionsForVote(), []);
+  const [[first, second], updateIds] = useState(getOptionsForVote());
 
   const firstPokemon = trpc.pokemonRouter.getPokemonById.useQuery({
     id: first,
@@ -23,6 +26,10 @@ const Home: NextPage = () => {
   });
 
   if (secondPokemon.isLoading || secondPokemon.isLoading) return null;
+
+  const voteForRoundest = (selected: number) => {
+    updateIds(getOptionsForVote());
+  };
 
   return (
     <>
@@ -37,7 +44,7 @@ const Home: NextPage = () => {
           </h1>
           {hydrated && (
             <div className="flex items-center justify-between rounded border p-8">
-              <div className="flex h-64 w-64 flex-col bg-gradient-to-b from-[#1782c9] to-[#c75d29]">
+              <div className="flex h-64 w-64 flex-col items-center bg-gradient-to-b from-[#1782c9] to-[#c75d29]">
                 {firstPokemon.data?.sprites?.front_default && (
                   <div className="relative h-full w-full">
                     <Image
@@ -48,13 +55,20 @@ const Home: NextPage = () => {
                     />
                   </div>
                 )}
-                <div className="bg-red-50 text-center text-xl capitalize">
+                <div className="text-center text-xl capitalize text-white">
                   {firstPokemon.data?.name}
                 </div>
+                <button
+                  type="button"
+                  className={buttonClasses}
+                  onClick={() => voteForRoundest(first)}
+                >
+                  Rounder
+                </button>{" "}
               </div>
               <span className="p-4 text-2xl text-white">VS</span>
 
-              <div className="flex h-64 w-64 flex-col bg-gradient-to-b from-[#1782c9] to-[#c75d29]">
+              <div className="flex h-64 w-64 flex-col items-center bg-gradient-to-b from-[#1782c9] to-[#c75d29]">
                 {secondPokemon.data?.sprites?.front_default && (
                   <div className="relative h-full w-full">
                     <Image
@@ -65,9 +79,18 @@ const Home: NextPage = () => {
                     />
                   </div>
                 )}
-                <div className="bg-red-50 text-center text-xl capitalize">
+                <div className="text-center text-xl capitalize text-white">
                   {secondPokemon.data?.name}
                 </div>
+                <button
+                  type="button"
+                  data-mdb-ripple="true"
+                  data-mdb-ripple-color="light"
+                  className={buttonClasses}
+                  onClick={() => voteForRoundest(second)}
+                >
+                  Rounder
+                </button>
               </div>
             </div>
           )}
