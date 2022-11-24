@@ -48,8 +48,8 @@ const Home: NextPage = () => {
                     />
                   </div>
                 )}
-                <div className="bg-red-50 text-center text-xl">
-                  {firstPokemon.data?.name.toUpperCase()}
+                <div className="bg-red-50 text-center text-xl capitalize">
+                  {firstPokemon.data?.name}
                 </div>
               </div>
               <span className="p-4 text-2xl text-white">VS</span>
@@ -65,8 +65,8 @@ const Home: NextPage = () => {
                     />
                   </div>
                 )}
-                <div className="bg-red-50 text-center text-xl">
-                  {secondPokemon.data?.name.toUpperCase()}
+                <div className="bg-red-50 text-center text-xl capitalize">
+                  {secondPokemon.data?.name}
                 </div>
               </div>
             </div>
