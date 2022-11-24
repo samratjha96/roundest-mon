@@ -3,6 +3,7 @@ import Head from "next/head";
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import { getOptionsForVote } from "../utils/getRandomPokemon";
+import { RouterOutputs } from "../utils/trpc";
 
 import { trpc } from "../utils/trpc";
 
@@ -44,59 +45,63 @@ const Home: NextPage = () => {
           </h1>
           {hydrated && (
             <div className="flex items-center justify-between rounded border p-8">
-              <div className="flex h-64 w-64 flex-col items-center bg-gradient-to-b from-[#1782c9] to-[#c75d29]">
-                {firstPokemon.data?.sprites?.front_default && (
-                  <div className="relative h-full w-full">
-                    <Image
-                      src={firstPokemon.data.sprites.front_default}
-                      layout="fill" // required
-                      alt={firstPokemon.data.name}
-                      className="h-full w-full"
-                    />
-                  </div>
+              {!firstPokemon.isLoading &&
+                firstPokemon.data &&
+                !secondPokemon.isLoading &&
+                secondPokemon.data && (
+                  <PokemonListing
+                    pokemon={firstPokemon.data}
+                    vote={() => voteForRoundest(first)}
+                  ></PokemonListing>
                 )}
-                <div className="text-center text-xl capitalize text-white">
-                  {firstPokemon.data?.name}
-                </div>
-                <button
-                  type="button"
-                  className={buttonClasses}
-                  onClick={() => voteForRoundest(first)}
-                >
-                  Rounder
-                </button>{" "}
-              </div>
               <span className="p-4 text-2xl text-white">VS</span>
-
-              <div className="flex h-64 w-64 flex-col items-center bg-gradient-to-b from-[#1782c9] to-[#c75d29]">
-                {secondPokemon.data?.sprites?.front_default && (
-                  <div className="relative h-full w-full">
-                    <Image
-                      src={secondPokemon.data.sprites.front_default}
-                      layout="fill" // required
-                      alt={secondPokemon.data.name}
-                      className="h-full w-full"
-                    />
-                  </div>
+              {!firstPokemon.isLoading &&
+                firstPokemon.data &&
+                !secondPokemon.isLoading &&
+                secondPokemon.data && (
+                  <PokemonListing
+                    pokemon={secondPokemon.data}
+                    vote={() => voteForRoundest(second)}
+                  ></PokemonListing>
                 )}
-                <div className="text-center text-xl capitalize text-white">
-                  {secondPokemon.data?.name}
-                </div>
-                <button
-                  type="button"
-                  data-mdb-ripple="true"
-                  data-mdb-ripple-color="light"
-                  className={buttonClasses}
-                  onClick={() => voteForRoundest(second)}
-                >
-                  Rounder
-                </button>
-              </div>
             </div>
           )}
         </div>
       </main>
     </>
+  );
+};
+
+type PokemonFromServer = RouterOutputs["pokemonRouter"]["getPokemonById"];
+
+const PokemonListing: React.FC<{
+  pokemon: PokemonFromServer;
+  vote: () => void;
+}> = (props) => {
+  return (
+    <div className="flex h-64 w-64 flex-col items-center bg-gradient-to-b from-[#1782c9] to-[#c75d29]">
+      {props.pokemon?.sprites?.front_default && (
+        <div className="relative h-full w-full">
+          <Image
+            src={props.pokemon.sprites.front_default}
+            layout="fill" // required
+            alt={props.pokemon.name}
+          />
+        </div>
+      )}
+      <div className="text-center text-xl capitalize text-white">
+        {props.pokemon?.name}
+      </div>
+      <button
+        type="button"
+        data-mdb-ripple="true"
+        data-mdb-ripple-color="light"
+        className={buttonClasses}
+        onClick={() => props.vote()}
+      >
+        Rounder
+      </button>
+    </div>
   );
 };
 
