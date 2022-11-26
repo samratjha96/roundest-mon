@@ -37,11 +37,10 @@ const Home: NextPage = () => {
         <title>Roundest Mon</title>
         <meta name="description" content="Vote on which pokemon is rounder?" />
       </Head>
-      <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
+      <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#31ab26] to-[#15162c]">
         <div className="container relative flex flex-col items-center justify-center gap-12 px-4 py-16">
           <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
-            Who&apos;s{" "}
-            <span className="text-[hsl(280,100%,70%)]">Rounder?</span>
+            Who&apos;s <span className="text-[hsl(310,85%,13%)]">Rounder?</span>
           </h1>
           <div className="flex items-center justify-between rounded border p-8">
             {!firstPokemon.isLoading &&
