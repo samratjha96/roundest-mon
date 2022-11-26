@@ -7,8 +7,8 @@ export const pokemonRouter = router({
   getPokemonById: publicProcedure
     .input(z.object({ id: z.number() }))
     .query(async ({ input }) => {
-      const api = new PokemonClient();
-      const pokemon = await api.getPokemonById(input.id);
+      const pokemonApiConnection = new PokemonClient();
+      const pokemon = await pokemonApiConnection.getPokemonById(input.id);
       return { sprites: pokemon.sprites, name: pokemon.name };
     }),
   castVote: publicProcedure
