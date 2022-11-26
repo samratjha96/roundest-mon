@@ -8,11 +8,6 @@ import { RouterOutputs } from "../utils/trpc";
 import { trpc } from "../utils/trpc";
 
 const Home: NextPage = () => {
-  const [hydrated, setHydrated] = useState(false);
-  useEffect(() => {
-    setHydrated(true);
-  }, []);
-
   const [[first, second], updateIds] = useState(getOptionsForVote());
 
   const firstPokemon = trpc.pokemonRouter.getPokemonById.useQuery({
@@ -47,29 +42,27 @@ const Home: NextPage = () => {
           <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
             Who's <span className="text-[hsl(280,100%,70%)]">Rounder?</span>
           </h1>
-          {hydrated && (
-            <div className="flex items-center justify-between rounded border p-8">
-              {!firstPokemon.isLoading &&
-                firstPokemon.data &&
-                !secondPokemon.isLoading &&
-                secondPokemon.data && (
-                  <PokemonListing
-                    pokemon={firstPokemon.data}
-                    vote={() => voteForRoundest(first)}
-                  ></PokemonListing>
-                )}
-              <span className="p-4 text-2xl text-white">VS</span>
-              {!firstPokemon.isLoading &&
-                firstPokemon.data &&
-                !secondPokemon.isLoading &&
-                secondPokemon.data && (
-                  <PokemonListing
-                    pokemon={secondPokemon.data}
-                    vote={() => voteForRoundest(second)}
-                  ></PokemonListing>
-                )}
-            </div>
-          )}
+          <div className="flex items-center justify-between rounded border p-8">
+            {!firstPokemon.isLoading &&
+              firstPokemon.data &&
+              !secondPokemon.isLoading &&
+              secondPokemon.data && (
+                <PokemonListing
+                  pokemon={firstPokemon.data}
+                  vote={() => voteForRoundest(first)}
+                ></PokemonListing>
+              )}
+            <span className="p-4 text-2xl text-white">VS</span>
+            {!firstPokemon.isLoading &&
+              firstPokemon.data &&
+              !secondPokemon.isLoading &&
+              secondPokemon.data && (
+                <PokemonListing
+                  pokemon={secondPokemon.data}
+                  vote={() => voteForRoundest(second)}
+                ></PokemonListing>
+              )}
+          </div>
         </div>
       </main>
     </>
